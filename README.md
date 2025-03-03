@@ -4,12 +4,47 @@
 This project is a **microservices-based system** designed for managing electrical devices, monitoring energy consumption, and enabling real-time communication between users. The system consists of an **admin dashboard** and a **client interface**, both implemented using **React** for the frontend and **Java Spring Boot** for the backend.
 
 ### 🎯 Features
-- **User Management**: Admins can add, edit, or remove users and assign them devices.
-- **Device Management**: Users can register, monitor, and analyze energy consumption of their smart devices.
-- **Real-time Chat**: Users and admins can communicate via a chat system powered by WebSockets.
-- **Load Balancing**: Ensures optimal traffic distribution for system stability and scalability.
-- **RabbitMQ Messaging**: Facilitates inter-service communication for event-driven interactions.
-- **Docker Deployment**: Containerized services for easy deployment and scalability.
+
+#### 🔐 User Authentication
+Users can log in securely using their credentials. The authentication system ensures only authorized users can access the platform.
+![Login](/assets/login.PNG)
+
+#### 👥 User Management
+Admins can manage users by adding, editing, or deleting accounts. Each user is assigned a role (admin or user) and can be linked to specific devices.
+![User Management](/assets/admin-UsersPage.PNG)
+
+
+#### ➕ Adding a new user
+Admins can add new users by providing a username, password, and selecting their user type.
+![Add User](/assets/admin-AddUser.PNG)
+
+#### 📊 Assigning Devices to Users
+Admins can assign devices to users, allowing them to monitor and manage their respective energy consumption.
+![Add device to user](/assets/admin-DevicesPage.PNG)
+
+#### 📋 User Dashboard
+Each user has a dashboard displaying their assigned devices and relevant energy data, improving user experience and accessibility.
+![User's devices](/assets/Users-MainPage.PNG)
+
+#### 💡 Device Management
+Users can add and manage their smart devices, including providing descriptions, addresses, and monitoring energy consumption.
+![Add device to user](/assets/admin-UsersPageAddDeviceToUser.PNG)
+
+#### ⚡ Energy Consumption Monitoring
+Users can select a date to view their energy consumption trends, visualized through graphs for better insights.
+![Device consumption](/assets/Users-DeviceConsumption.PNG)
+
+
+
+#### 🗨️ Real-time Chat
+Users can communicate via real-time chat using WebSockets. This enables instant messaging between admins and users.
+![Chat](/assets/Chat.PNG)
+
+
+
+
+
+
 
 ## 🏗️ Tech Stack
 ### Backend:
