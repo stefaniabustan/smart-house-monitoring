@@ -1,0 +1,26 @@
+
+# Allow specific folders and files
+!UserMicroservice/src/
+!UserMicroservice/pom.xml
+!UserMicroservice/Dockerfile
+
+!DeviceMicroservice/src/
+!DeviceMicroservice/pom.xml
+!DeviceMicroservice/Dockerfile
+
+!ReactFrontend/frontend/src/
+!ReactFrontend/frontend/package.json
+!ReactFrontend/frontend/Dockerfile
+!ReactFrontend/frontend/nginx.conf
+
+# Ignore common folders and files
+**/.idea/
+**/.git/
+**/node_modules/
+**/target/
+**/build/
+**/*.log
+**/*.class
+**/*.jar
+**/*.war
+**/package-lock.json

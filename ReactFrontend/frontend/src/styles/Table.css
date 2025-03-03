@@ -1,0 +1,23 @@
+/* Center the table container */
+.table-container {
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically (if you set a height) */
+    padding-top: 2rem;
+}
+
+/* Style the table */
+.table-container table {
+    width: 100%; /* Make table full width of container */
+    min-width: 900px; /* Optional: Limit max width */
+}
+
+.my-devices-header {
+    font-size: 24px; /* Set font size to make it larger */
+    font-weight: bold; /* Make the text bold */
+    text-align: left; /* Align text to the left */
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically (if you set a height) */
+    padding-top: 2rem;
+}

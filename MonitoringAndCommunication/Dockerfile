@@ -1,0 +1,5 @@
+FROM openjdk:8
+WORKDIR /app
+COPY target/ds-2024-0.0.1-SNAPSHOT.jar /app/ds-2024-0.0.1-SNAPSHOT.jar
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "ds-2024-0.0.1-SNAPSHOT.jar"]

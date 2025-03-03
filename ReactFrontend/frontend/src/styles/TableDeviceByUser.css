@@ -1,0 +1,13 @@
+/* Center the table container */
+.table-container2 {
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically (if you set a height) */
+}
+
+/* Style the table */
+.table-container Table {
+    width: 100%; /* Make table full width of container */
+    max-width: 500px; /* Optional: Limit max width */
+}
+

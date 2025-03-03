@@ -1,0 +1,27 @@
+.menu-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ant-menu {
+    flex: 1;
+    background-color: #ff8fab;
+    padding: 0.7rem 2rem 0.5rem 3rem;
+
+
+}
+
+.menu-left {
+    display: flex;
+    gap: 25px;
+}
+
+.menu-right {
+    margin-left: auto;
+}
+
+.ant-menu-item {
+    font-size: 17px;
+    color: white;
+}

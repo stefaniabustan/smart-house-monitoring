@@ -1,0 +1,45 @@
+.mainContainer{
+    background-image: url('../images/desktop1.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.transparent-container {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    min-width: 300px;
+}
+
+.titleContainer  {
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.loginForm .ant-input,
+.loginForm .ant-btn {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    border-color: white;
+}
+
+.loginForm .ant-input {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.loginForm .ant-input-password {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+.loginForm .ant-form-item-label > label {
+    color: white;
+}
+
+.loginForm .ant-form-item-explain {
+    color: black;
+}

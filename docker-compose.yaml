@@ -1,0 +1,171 @@
+services:
+  reverse-proxy:
+    image: traefik:v3.2
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --accesslog=true
+      - --accesslog.filepath=/var/log/traefik/access.log
+      - --log.level=DEBUG
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik_logs:/var/log/traefik
+    networks:
+      - app-network
+
+  user_db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: porto001
+      POSTGRES_DB: communication-db
+      PGPORT: 5434
+    ports:
+      - "5434:5434"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  device_db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: porto001
+      POSTGRES_DB: device-db
+      PGPORT: 5433
+    ports:
+      - "5433:5433"
+    volumes:
+      - device_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  measurements_db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: porto001
+      POSTGRES_DB: measurements-db
+      PGPORT: 5435
+    ports:
+      - "5435:5435"
+    volumes:
+      - measurements_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  users_microservice:
+    build:
+      context: ./UserMicroservice
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user_db:5434/communication-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: porto001
+      PGPORT: 5434
+    # ports:
+    #   - "8080:8080"
+    depends_on:
+      - user_db
+    networks:
+      - app-network
+    deploy:
+      replicas: 2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user-service.rule=Host(`user.localhost`)"
+      - "traefik.http.services.user-service.loadbalancer.server.port=8083"
+
+  devices_microservice:
+    build:
+      context: ./DeviceMicroservice
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://device_db:5433/device-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: porto001
+    # ports:
+    #   - "8081:8081"
+    depends_on:
+      device_db:
+        condition: service_healthy
+    networks:
+      - app-network
+    deploy:
+      replicas: 2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.device-service.rule=Host(`device.localhost`)"
+      - "traefik.http.services.device-service.loadbalancer.server.port=8081"
+
+  monitoring_microservice:
+    build:
+      context: ./MonitoringAndCommunication
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://measurements_db:5435/measurements-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: porto001
+    # ports:
+    #   - "8082:8082"
+    depends_on:
+      measurements_db:
+        condition: service_healthy
+    networks:
+      - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitoring-communication-service.rule=Host(`monitoring.localhost`)"
+      - "traefik.http.services.monitoring-communication-service.loadbalancer.server.port=8082"
+
+  chat_microservice:
+    build:
+      context: ./ChatMicroservice
+      dockerfile: Dockerfile
+    # ports:
+    #   - "8084:8084"
+    networks:
+      - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.chat-service.rule=Host(`chat.localhost`)"
+      - "traefik.http.services.chat-service.loadbalancer.server.port=8084"
+
+  react_frontend:
+    build:
+      context: ./ReactFrontend/frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - users_microservice
+      - devices_microservice
+      - monitoring_microservice
+      - chat_microservice
+    networks:
+      - app-network
+    ports:
+      - "3000:80" 
+
+volumes:
+  user_db_data:
+  device_db_data:
+  measurements_db_data:
+  traefik_logs:
+
+networks:
+  app-network:
+    driver: bridge
